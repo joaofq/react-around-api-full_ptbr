@@ -4,13 +4,24 @@ const jwt = require('jsonwebtoken');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
     .catch(() => {
       const ERROR_CODE = 500;
       res.status(ERROR_CODE).send({ message: 'Erro' });
     });
+};
+
+module.exports.getOneUser = (req, res, next) => {
+  User.findById({ _id: req.user._id })
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('User ID not found');
+      }
+      res.send(user);
+    })
+    .catch(next);
 };
 
 module.exports.getUserById = (req, res) => {
