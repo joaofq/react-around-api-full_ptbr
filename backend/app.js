@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
+const { createUser, login } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
 
@@ -33,6 +34,10 @@ app.use('/', users, cards);
 app.get('*', (req, res) => {
   res.status(404).send({ message: 'A solicitação não foi encontrada' });
 });
+
+app.post('/signin', login);
+
+app.post('/signup', createUser);
 
 app.listen(PORT, () => {
   console.log(`App rodando na porta ${PORT}.`);

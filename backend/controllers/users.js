@@ -1,5 +1,8 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -95,4 +98,22 @@ module.exports.updateAvatar = (req, res) => {
         res.status(ERROR_CODE).send({ message: 'Erro' });
       }
     });
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials({ email, password })
+    .then((user) => {
+      if (!user) {
+        throw new UnauthorizedError('Incorrect email or password');
+      }
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'AcBd1324JFPQ1984',
+        { expiresIn: '7d' }
+      );
+      res.cookie('token', token, { httpOnly: true });
+      res.send({ token });
+    })
+    .catch(next);
 };
