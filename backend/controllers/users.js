@@ -113,7 +113,7 @@ module.exports.updateAvatar = (req, res) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-  return User.findUserByCredentials({ email, password })
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       if (!user) {
         throw new UnauthorizedError('Incorrect email or password');
@@ -123,7 +123,6 @@ module.exports.login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'AcBd1324JFPQ1984',
         { expiresIn: '7d' }
       );
-      res.cookie('token', token, { httpOnly: true });
       res.send({ token });
     })
     .catch(next);

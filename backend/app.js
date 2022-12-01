@@ -9,6 +9,7 @@ const cors = require('cors');
 const { celebrate, Joi, errors, isCelebrateError } = require('celebrate');
 const NotFoundError = require('./middlewares/errors/NotFoundError');
 const BadRequestError = require('./middlewares/errors/BadRequestError');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
@@ -23,6 +24,8 @@ app.options('*', cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(requestLogger);
 
 app.post(
   '/signin',
@@ -63,7 +66,7 @@ app.get('*', (req, res) => {
   res.status(404).send({ message: 'A solicitação não foi encontrada' });
 });
 
-//errorLogger?
+app.use(errorLogger);
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
