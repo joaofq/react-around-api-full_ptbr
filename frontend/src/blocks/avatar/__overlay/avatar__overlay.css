@@ -1,0 +1,14 @@
+.avatar__overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.avatar__overlay:hover {
+  opacity: 1;
+  cursor: pointer;
+}

@@ -1,0 +1,36 @@
+.popup__button {
+  margin-top: 48px;
+  max-width: 358px;
+  height: 50.15px;
+  background-color: black;
+  color: white;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.22;
+  text-align: center;
+  border-radius: 2px;
+  border: 0;
+}
+
+.popup__button:hover {
+  background: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+}
+
+.popup__button_disabled {
+  background-color: white;
+  color: black;
+  border: 1px solid #000000;
+  opacity: 0.2;
+}
+
+.popup__button_disabled:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid #000000;
+  opacity: 0.2;
+}
+
+.popup__button_infotooltip {
+  display: none;
+}

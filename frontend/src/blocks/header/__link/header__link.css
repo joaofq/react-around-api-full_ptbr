@@ -1,0 +1,15 @@
+.header__link {
+  margin: 0;
+  color: white;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-decoration: none;
+}
+
+.header__link-logout {
+  color: #a9a9a9;
+  cursor: pointer;
+}

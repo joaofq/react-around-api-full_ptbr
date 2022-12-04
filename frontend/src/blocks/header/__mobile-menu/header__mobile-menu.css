@@ -1,0 +1,45 @@
+.header__mobile-menu {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .header__mobile-menu {
+    display: block;
+    background: black;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    margin: 10px;
+    font-size: 25px;
+  }
+
+  .header__mobile-menu::before {
+    content: '';
+    display: inline-block;
+    height: 3px;
+    width: 20px;
+    background: white;
+    box-shadow: 0 6px white, 0 -6px white;
+    font-size: 22px;
+    color: white;
+  }
+
+  .no-before::before {
+    display: none;
+  }
+
+  .header__info {
+    display: none;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 46px;
+  }
+
+  .header__note {
+    margin-bottom: 10px;
+  }
+}
