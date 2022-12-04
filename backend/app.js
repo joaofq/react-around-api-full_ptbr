@@ -7,7 +7,6 @@ const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const cors = require('cors');
 const { celebrate, Joi, errors, isCelebrateError } = require('celebrate');
-const NotFoundError = require('./middlewares/errors/NotFoundError');
 const BadRequestError = require('./middlewares/errors/BadRequestError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -26,6 +25,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(requestLogger);
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('O servidor travará agora');
+  }, 0);
+});
 
 app.post(
   '/signin',

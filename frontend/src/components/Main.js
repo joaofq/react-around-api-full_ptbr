@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import edit from '../images/edit.svg';
 import add from '../images/add.svg';
 import Card from '../components/Card';

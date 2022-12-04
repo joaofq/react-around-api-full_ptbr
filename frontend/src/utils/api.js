@@ -5,7 +5,7 @@ class Api {
   }
 
   getUserInfo() {
-    return fetch(this._baseUrl + "users/me", {
+    return fetch(this._baseUrl + 'users/me', {
       headers: this._headers,
     })
       .then((res) => {
@@ -18,9 +18,9 @@ class Api {
   }
 
   setUserInfo(name, about) {
-    return fetch(this._baseUrl + "users/me", {
+    return fetch(this._baseUrl + 'users/me', {
       headers: this._headers,
-      method: "PATCH",
+      method: 'PATCH',
       body: JSON.stringify({
         name,
         about,
@@ -37,9 +37,9 @@ class Api {
   }
 
   setUserAvatar(avatar) {
-    return fetch(this._baseUrl + "users/me/avatar", {
+    return fetch(this._baseUrl + 'users/me/avatar', {
       headers: this._headers,
-      method: "PATCH",
+      method: 'PATCH',
       body: JSON.stringify({
         avatar,
       }),
@@ -55,7 +55,7 @@ class Api {
   }
 
   getCardsList() {
-    return fetch(this._baseUrl + "cards", {
+    return fetch(this._baseUrl + 'cards', {
       headers: this._headers,
     })
       .then((res) => {
@@ -69,9 +69,9 @@ class Api {
   }
 
   addCard(name, link) {
-    return fetch(this._baseUrl + "cards", {
+    return fetch(this._baseUrl + 'cards', {
       headers: this._headers,
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
         name: name,
         link: link,
@@ -88,9 +88,9 @@ class Api {
   }
 
   deleteCard(_id) {
-    return fetch(this._baseUrl + "cards/" + _id, {
+    return fetch(this._baseUrl + 'cards/' + _id, {
       headers: this._headers,
-      method: "DELETE",
+      method: 'DELETE',
     })
       .then((res) => {
         if (res.ok) {
@@ -101,8 +101,8 @@ class Api {
   }
 
   changeLikeCardStatus(_id, isLiked) {
-    const likeMethod = isLiked ? "PUT" : "DELETE";
-    return fetch(this._baseUrl + "/cards/likes/" + _id, {
+    const likeMethod = isLiked ? 'PUT' : 'DELETE';
+    return fetch(this._baseUrl + '/cards/likes/' + _id, {
       headers: this._headers,
       method: likeMethod,
     })
@@ -117,11 +117,17 @@ class Api {
   }
 }
 
+const token = localStorage.getItem('jwt');
+
 const api = new Api({
-  baseUrl: "https://around.nomoreparties.co/v1/web_ptbr_cohort_01/",
+  baseUrl:
+    process.env.NODE_ENV === 'production'
+      ? 'https://api.malcolmxavier.students.nomoreparties.site'
+      : 'http://localhost:3000',
   headers: {
-    authorization: "016129e8-3c13-4454-8a48-4f0ea5cdfc64",
-    "Content-Type": "application/json",
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
   },
 });
 

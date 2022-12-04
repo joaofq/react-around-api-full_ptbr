@@ -1,6 +1,5 @@
-import React from "react";
-import PopupWithForm from "./PopupWithForm";
-import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+import React from 'react';
+import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup(props) {
   const avatarRef = React.useRef();
@@ -11,7 +10,7 @@ function EditAvatarPopup(props) {
     props.onUpdateAvatar({
       avatar: avatarRef.current.value,
     });
-    avatarRef.current.value = "";
+    avatarRef.current.value = '';
   }
 
   return (
