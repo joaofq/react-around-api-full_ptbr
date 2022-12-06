@@ -4,6 +4,11 @@ class Api {
     this._headers = headers;
   }
 
+  setToken() {
+    const token = localStorage.getItem('jwt');
+    this._headers.Authorization = `Bearer ${token}`;
+  }
+
   getUserInfo() {
     return fetch(this._baseUrl + 'users/me', {
       headers: this._headers,
@@ -122,8 +127,8 @@ const token = localStorage.getItem('jwt');
 const api = new Api({
   baseUrl:
     process.env.NODE_ENV === 'production'
-      ? 'https://api.malcolmxavier.students.nomoreparties.site'
-      : 'http://localhost:3000',
+      ? 'https://api.joaofq.students.nomoredomainssbs.ru/'
+      : 'http://localhost:3000/',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
