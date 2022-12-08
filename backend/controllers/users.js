@@ -2,45 +2,53 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const ServerError = require('../middlewares/errors/ServerError');
+const NotFoundError = require('../middlewares/errors/NotFoundError');
+const UnauthorizedError = require('../middlewares/errors/UnauthorizedError');
+const ConflictError = require('../middlewares/errors/ConflictError');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
     .catch(() => {
-      const ERROR_CODE = 500;
-      res.status(ERROR_CODE).send({ message: 'Erro' });
-    });
-};
-
-module.exports.getOneUser = (req, res, next) => {
-  User.findById({ _id: req.user._id })
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('User ID not found');
-      }
-      res.send(user);
+      throw new ServerError('Erro no servidor.');
     })
     .catch(next);
 };
 
-module.exports.getUserById = (req, res) => {
+module.exports.getOneUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .orFail(() => {
+      throw new NotFoundError('Usuário não encontrado.');
+    })
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      console.log(err);
+      if (err.name === 'ValidationError') {
+        throw new NotFoundError('Usuário não encontrado.');
+      } else {
+        throw new ServerError('Erro no servidor.');
+      }
+    })
+    .catch(next);
+};
+
+module.exports.getUsersById = (req, res, next) => {
   User.findById(req.params.userId)
     .orFail(() => {
-      const error = new Error('Id não encontrado');
-      error.statusCode = 404;
-      throw error;
+      throw new NotFoundError('Usuário não encontrado.');
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.statusCode === 404) {
-        const ERROR_CODE = 404;
-        res.status(ERROR_CODE).send({ message: 'Usuário não encontrado' });
+        throw new NotFoundError('Usuário não encontrado.');
       } else {
-        const ERROR_CODE = 500;
-        res.status(ERROR_CODE).send({ message: 'Erro' });
+        throw new ServerError('Erro no servidor.');
       }
-    });
+    })
+    .catch(next);
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -53,77 +61,82 @@ module.exports.createUser = (req, res, next) => {
       password: hash,
     })
       .then((user) => {
-        res.send({ data: user });
+        res.send({
+          data: user,
+        });
       })
       .catch((err) => {
         if (err.name === 'ValidationError') {
-          const ERROR_CODE = 400;
-          res.status(ERROR_CODE).send({ message: 'Dados inválidos' });
+          throw new UnauthorizedError(
+            'Dados inválidos para criação de usuário'
+          );
+        } else if (err.name === 'MongoServerError') {
+          throw new ConflictError('Usuário já existente.');
         } else {
-          const ERROR_CODE = 500;
-          res.status(ERROR_CODE).send({ message: 'Erro' });
+          throw new ServerError('Erro no servidor.');
         }
       })
       .catch(next);
   });
 };
 
-module.exports.updateUser = (req, res) => {
+module.exports.updateUser = (req, res, next) => {
+  const { name, about, avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
-    {
-      name: req.body.name,
-      about: req.body.about,
-    },
-    { new: true }
+    { name, about, avatar },
+    { new: true, runValidators: true }
   )
+    .select('+password')
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'validationError') {
-        const ERROR_CODE = 400;
-        res.status(ERROR_CODE).send({
-          message: 'Dados inválidos',
-        });
+      if (err.name === 'ValidationError') {
+        throw new UnauthorizedError(
+          'Dados inválidos passados para atualizar perfil'
+        );
       } else {
-        const ERROR_CODE = 500;
-        res.status(ERROR_CODE).send({ message: 'Erro' });
+        throw new ServerError('Erro no servidor.');
       }
-    });
+    })
+    .catch(next);
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
+  const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
-    { avatar: req.body.avatar },
-    { new: true }
+    { avatar },
+    { new: true, runValidators: true }
   )
-    .then((user) => res.send({ user }))
+    .select('+password')
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'validationError') {
-        const ERROR_CODE = 400;
-        res.status(ERROR_CODE).send({
-          message: 'Dados inválidos',
-        });
+      if (err.name === 'ValidationError') {
+        throw new UnauthorizedError(
+          'Dados inválidos passados aos métodos para atualizar avatar'
+        );
       } else {
-        const ERROR_CODE = 500;
-        res.status(ERROR_CODE).send({ message: 'Erro' });
+        throw new ServerError('Erro no servidor.');
       }
-    });
+    })
+    .catch(next);
 };
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      if (!user) {
-        throw new UnauthorizedError('Incorrect email or password');
-      }
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'AcBd1324JFPQ1984',
-        { expiresIn: '7d' }
+        {
+          expiresIn: '7d',
+        }
       );
       res.send({ token });
+    })
+    .catch((err) => {
+      throw new UnauthorizedError('Usuário ou senha inválidos.');
     })
     .catch(next);
 };

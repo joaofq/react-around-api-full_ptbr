@@ -13,7 +13,7 @@ import AddPlacePopup from './AddPlacePopup';
 import DeletePopup from './DeletePopup';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import InfoTooltip from './InfoTooltip.js';
-import * as auth from '../utils/auth';
+import * as auth from '../utils/auth.js';
 import ProtectedRoute from './ProtectedRoute.js';
 
 function App() {
@@ -38,6 +38,7 @@ function App() {
       auth
         .getContent(jwt)
         .then((res) => {
+          console.log(res);
           const userData = {
             id: res.data._id,
             email: res.data.email,
@@ -107,14 +108,22 @@ function App() {
         }
       })
       .then(() => {
+        api.setToken();
+      })
+      .then(() => {
         api.getCardsList().then((res) => {
           setCards(res);
         });
+      })
+      .then(() => {
         api.getUserInfo().then((res) => {
           setCurrentUser(res);
         });
+      })
+      .then(() => {
+        const userData = { username: currentUser.name, email };
         setIsLoggedIn(true);
-        userData.email = email;
+        setUserData(userData);
         history.push('/');
       })
       .catch((err) => {

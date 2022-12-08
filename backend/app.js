@@ -1,23 +1,27 @@
 require('dotenv').config();
+
 const express = require('express');
+const cors = require('cors');
+
 const mongoose = require('mongoose');
+
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
+
 const auth = require('./middlewares/auth');
-const cors = require('cors');
 const { celebrate, Joi, errors, isCelebrateError } = require('celebrate');
 const BadRequestError = require('./middlewares/errors/BadRequestError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
+mongoose.connect('mongodb://localhost:27017/aroundb');
+
 const app = express();
 
 app.use(cors());
 app.options('*', cors());
-
-mongoose.connect('mongodb://localhost:27017/aroundb');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -82,7 +86,9 @@ app.use(errors());
 
 app.use((err, req, res, next) => {
   if (isCelebrateError(err)) {
-    throw new BadRequestError('Request não pode ser completado.');
+    throw new BadRequestError(
+      'Request não pode ser completado. Erro validação celebrate.'
+    );
   }
   next(err);
 });

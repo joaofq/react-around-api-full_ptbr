@@ -7,8 +7,9 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new UnauthorizedError('Authorization denied');
+    throw new UnauthorizedError('Autorização negada.');
   }
+
   const token = authorization.replace('Bearer ', '');
   let payload;
 
@@ -18,7 +19,7 @@ module.exports = (req, res, next) => {
       NODE_ENV === 'production' ? JWT_SECRET : 'AcBd1324JFPQ1984'
     );
   } catch (err) {
-    throw new UnauthorizedError('Authorization denied');
+    throw new UnauthorizedError('Autorização negada.');
   }
 
   req.user = payload;

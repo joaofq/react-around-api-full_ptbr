@@ -50,12 +50,6 @@ export const getContent = (token) => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) =>
-      res.ok
-        ? res.json()
-        : Promise.reject(res.status + ' Error: ' + res.statusText),
-    )
-    .then((data) => {
-      return data;
-    });
+    .then((res) => res.json())
+    .then((data) => data);
 };

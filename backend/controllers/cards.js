@@ -1,91 +1,101 @@
 const Card = require('../models/card');
 
-module.exports.getCards = (req, res) => {
+const ServerError = require('../middlewares/errors/ServerError');
+const NotFoundError = require('../middlewares/errors/NotFoundError');
+const UnauthorizedError = require('../middlewares/errors/UnauthorizedError');
+
+module.exports.getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
     .catch(() => {
-      const ERROR_CODE = 500;
-      res
-        .status(ERROR_CODE)
-        .send({ message: 'Erro ao recuperar cards do banco de dados.' });
-    });
+      throw new ServerError('Erro do servidor ao tentar puxar cards');
+    })
+    .catch(next);
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
-    .then((card) => res.send(card))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        const ERROR_CODE = 400;
-        res.status(ERROR_CODE).send({ message: 'Dados inválidos.' });
+        throw new UnauthorizedError('Dados inválidos ao tentar criar cartão');
       } else {
-        const ERROR_CODE = 500;
-        res
-          .status(ERROR_CODE)
-          .send({ message: 'Erro ao tentar criar novo card.' });
+        throw new ServerError(
+          'Erro interno do servidor ao tentar criar cartão'
+        );
       }
-    });
+    })
+    .catch(next);
 };
 
-module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.cardId)
-    .then((card) => res.send({ data: card }))
+module.exports.deleteCard = (req, res, next) => {
+  Card.findByIdAndRemove(req.params.cardId)
+    .orFail(() => {
+      throw new UnauthorizedError('Usuário não autorizado para deletar card.');
+    })
+    .then((card) => {
+      if (card && req.user._id.toString() === card.owner.toString()) {
+        Card.deleteOne(card).then((deletedCard) => {
+          res.send(deletedCard);
+        });
+      } else if (!card) {
+        throw new NotFoundError('Cartão não encontrado.');
+      } else {
+        throw new UnauthorizedError(
+          'Usuário não autorizado para deletar card.'
+        );
+      }
+    })
     .catch((err) => {
       if (err.statusCode === 404) {
         const ERROR_CODE = 404;
-        res.status(ERROR_CODE).send({ message: 'Card não encontrado.' });
+        throw new NotFoundError('Cartão não encontrado.');
       } else {
-        const ERROR_CODE = 500;
-        res.status(ERROR_CODE).send({ message: 'Erro ao deletar card.' });
+        throw new ServerError('Erro no servidor.');
       }
-    });
+    })
+    .catch(next);
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true }
   )
     .orFail(() => {
-      const error = new Error('Cartão não encontrado.');
-      error.statusCode = 404;
-      throw error;
+      const error = new UnauthorizedError('Cartão não encontrado.');
     })
-    .then((card) => res.send({ data: card }))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.statusCode === 404) {
-        const ERROR_CODE = 404;
-        res.status(ERROR_CODE).send({ message: 'Card não encontrado.' });
+        throw new NotFoundError('Cartão não encontrado.');
       } else {
-        const ERROR_CODE = 500;
-        res.status(ERROR_CODE).send({ message: 'Erro ao curtir card.' });
+        throw new ServerError('Erro no servidor.');
       }
-    });
+    })
+    .catch(next);
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true }
   )
     .orFail(() => {
-      const error = new Error('Card não encontrado');
-      error.statusCode = 404;
-      throw error;
+      throw new UnauthorizedError('Nenhum cartão encontrado');
     })
-    .then((card) => res.send({ data: card }))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.statusCode === 404) {
-        const ERROR_CODE = 404;
-        res.status(ERROR_CODE).send({ message: 'Card não encontrado' });
+        throw new NotFoundError('Cartão não encontrado.');
       } else {
-        const ERROR_CODE = 500;
-        res.status(ERROR_CODE).send({ message: 'Erro ao descurtir card.' });
+        throw new ServerError('Erro no servidor.');
       }
-    });
+    })
+    .catch(next);
 };

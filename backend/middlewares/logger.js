@@ -23,6 +23,7 @@ const errorLogger = expressWinston.errorLogger({
     new winston.transports.File({
       filename: path.join(logsDir, '/error.log'),
     }),
+    //    new winston.transports.Console(),
   ],
   format: winston.format.json(),
 });
