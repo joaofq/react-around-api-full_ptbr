@@ -142,8 +142,8 @@ function App() {
   }
 
   function handleUpdateUser(obj) {
-    api.setUserInfo(obj.name, obj.about).then((data) => {
-      setCurrentUser(data);
+    api.setUserInfo(obj.name, obj.about).then((userUpdated) => {
+      setCurrentUser(userUpdated.data);
       closeAllPopups();
     });
   }
@@ -153,8 +153,8 @@ function App() {
   }
 
   function handleUpdateAvatar(obj) {
-    api.setUserAvatar(obj.avatar).then((data) => {
-      setCurrentUser(data);
+    api.setUserAvatar(obj.avatar).then((newAvatar) => {
+      setCurrentUser(newAvatar.data);
       closeAllPopups();
     });
   }
@@ -165,7 +165,6 @@ function App() {
 
   function handleAddPlaceSubmit(obj) {
     api.addCard(obj.placeName, obj.link).then((newCard) => {
-      console.log(newCard);
       setCards([newCard, ...cards]);
       closeAllPopups();
     });
