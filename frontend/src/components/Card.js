@@ -1,17 +1,21 @@
-import React from "react";
-import trash from "../images/trash.svg";
-import like from "../images/like.svg";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import React from 'react';
+import trash from '../images/trash.svg';
+import like from '../images/like.svg';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Card(props) {
   const currentUser = React.useContext(CurrentUserContext);
+
   const isOwn = props.card.owner._id === currentUser._id;
+
   const cardDeleteButtonClassName = `card__delete-button ${
-    isOwn ? "card__delete-button" : "card__delete-button_hidden"
+    isOwn ? 'card__delete-button' : 'card__delete-button_hidden'
   }`;
+
   const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
+
   const cardLikeButtonClassName = `likebutton ${
-    isLiked && "likebutton_active"
+    isLiked ? 'likebutton_active' : ''
   }`;
 
   function handleClick() {
