@@ -25,7 +25,7 @@ router.get(
   getUsers
 );
 
-router.get('users/me', getOneUser);
+router.get('/users/me', getOneUser);
 
 router.get(
   '/users/:userId',

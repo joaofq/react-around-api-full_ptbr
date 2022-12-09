@@ -11,7 +11,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => res.send(users))
     .catch(() => {
       throw new ServerError('Erro no servidor.');
     })

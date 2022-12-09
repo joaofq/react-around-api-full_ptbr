@@ -10,7 +10,7 @@ class Api {
   }
 
   getUserInfo() {
-    return fetch(this._baseUrl + 'users/me', {
+    return fetch(this._baseUrl + '/users/me', {
       headers: this._headers,
     })
       .then((res) => {
@@ -23,7 +23,7 @@ class Api {
   }
 
   setUserInfo(name, about) {
-    return fetch(this._baseUrl + 'users/me', {
+    return fetch(this._baseUrl + '/users/me', {
       headers: this._headers,
       method: 'PATCH',
       body: JSON.stringify({
@@ -42,7 +42,7 @@ class Api {
   }
 
   setUserAvatar(avatar) {
-    return fetch(this._baseUrl + 'users/me/avatar', {
+    return fetch(this._baseUrl + '/users/me/avatar', {
       headers: this._headers,
       method: 'PATCH',
       body: JSON.stringify({
@@ -60,7 +60,7 @@ class Api {
   }
 
   getCardsList() {
-    return fetch(this._baseUrl + 'cards', {
+    return fetch(this._baseUrl + '/cards', {
       headers: this._headers,
     })
       .then((res) => {
@@ -74,7 +74,7 @@ class Api {
   }
 
   addCard(name, link) {
-    return fetch(this._baseUrl + 'cards', {
+    return fetch(this._baseUrl + '/cards', {
       headers: this._headers,
       method: 'POST',
       body: JSON.stringify({
@@ -93,7 +93,7 @@ class Api {
   }
 
   deleteCard(_id) {
-    return fetch(this._baseUrl + 'cards/' + _id, {
+    return fetch(this._baseUrl + '/cards/' + _id, {
       headers: this._headers,
       method: 'DELETE',
     })
@@ -106,8 +106,9 @@ class Api {
   }
 
   changeLikeCardStatus(_id, isLiked) {
+    console.log('Card ID do change é ', _id);
     const likeMethod = isLiked ? 'PUT' : 'DELETE';
-    return fetch(this._baseUrl + '/cards/likes/' + _id, {
+    return fetch(`${this._baseUrl}/cards/${_id}/likes`, {
       headers: this._headers,
       method: likeMethod,
     })
@@ -127,8 +128,8 @@ const token = localStorage.getItem('jwt');
 const api = new Api({
   baseUrl:
     process.env.NODE_ENV === 'production'
-      ? 'https://api.joaofq.students.nomoredomainssbs.ru/'
-      : 'http://localhost:3000/',
+      ? 'https://api.joaofq.students.nomoredomainssbs.ru'
+      : 'http://localhost:3000',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

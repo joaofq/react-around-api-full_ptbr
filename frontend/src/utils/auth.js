@@ -1,6 +1,6 @@
 export const BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://api.joaofq.students.nomoredomainssbs.ru/'
+    ? 'https://api.joaofq.students.nomoredomainssbs.ru'
     : 'http://localhost:3000';
 
 export const register = (email, password) => {
@@ -50,6 +50,12 @@ export const getContent = (token) => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => res.json())
-    .then((data) => data);
+    .then((res) =>
+      res.ok
+        ? res.json()
+        : Promise.reject(res.status + ' Error: ' + res.statusText),
+    )
+    .then((data) => {
+      return data;
+    });
 };

@@ -18,7 +18,7 @@ module.exports.createCard = (req, res, next) => {
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
-    .then((user) => res.send({ data: user }))
+    .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new UnauthorizedError('Dados inválidos ao tentar criar cartão');
@@ -32,7 +32,7 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findByIdAndDelete(req.params.cardId)
     .orFail(() => {
       throw new UnauthorizedError('Usuário não autorizado para deletar card.');
     })
@@ -69,7 +69,7 @@ module.exports.likeCard = (req, res, next) => {
     .orFail(() => {
       const error = new UnauthorizedError('Cartão não encontrado.');
     })
-    .then((user) => res.send({ data: user }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.statusCode === 404) {
         throw new NotFoundError('Cartão não encontrado.');
@@ -89,7 +89,7 @@ module.exports.dislikeCard = (req, res, next) => {
     .orFail(() => {
       throw new UnauthorizedError('Nenhum cartão encontrado');
     })
-    .then((user) => res.send({ data: user }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.statusCode === 404) {
         throw new NotFoundError('Cartão não encontrado.');
