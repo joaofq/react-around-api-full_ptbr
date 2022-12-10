@@ -41,18 +41,21 @@ function Main(props) {
           </button>
         </section>
         <ul className="elements">
-          {props.cards.map((card) => {
-            return (
-              <Card
-                card={card}
-                key={card._id}
-                onCardClick={props.onCardClick}
-                onDeleteCardClick={props.onDeleteCardClick}
-                onCardDelete={props.onCardDelete}
-                onCardLike={props.onCardLike}
-              />
-            );
-          })}
+          {props.cards
+            .slice(0)
+            .reverse()
+            .map((card) => {
+              return (
+                <Card
+                  card={card}
+                  key={card._id}
+                  onCardClick={props.onCardClick}
+                  onDeleteCardClick={props.onDeleteCardClick}
+                  onCardDelete={props.onCardDelete}
+                  onCardLike={props.onCardLike}
+                />
+              );
+            })}
         </ul>
 
         <template className="cardTemplate"></template>

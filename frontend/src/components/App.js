@@ -165,7 +165,7 @@ function App() {
 
   function handleAddPlaceSubmit(obj) {
     api.addCard(obj.placeName, obj.link).then((newCard) => {
-      setCards([newCard, ...cards]);
+      setCards([...cards, newCard]);
       closeAllPopups();
     });
   }
