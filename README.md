@@ -1,8 +1,36 @@
-# react-around-api-full_ptbr
+# Projeto: Around the U.S.A.
 
-The API of "Around the U.S." with authorization and registration handled by the back-end server.
+### Visão geral
 
-This repository contains the full API of "Around the U.S." project that features user authorization and user registration and handles cards and users. Please add to this readme:
+Este é um projeto desenvolvido durante o curso de desenvolvimento web Practicum by Yandex - Projeto 15.
 
-a link to repository with the complete React application which uses this API;
-a link to the website that hosts your API..
+O Projeto consiste em uma rede social onde os usuários compartilham cards com fotos de locais, podendo curtir as fotos uns dos outros.
+
+**Tecnologias Utilizadas - Frontend**
+
+- Método BEM de organização de arquivos
+- HTML responsivo com tags semânticas
+- CSS com layout responsivo
+  -- flex-box
+  -- mediaqueries
+- Javascript
+- React
+
+**Tecnologias Utilizadas - Frontend**
+
+- Método BEM de organização de arquivos
+- Nodejs
+- Express
+- mongodb
+- Celebrate
+- Winston
+
+**Hospedagem Cloud**
+
+O projeto foi implementado em máquina virtual no Google Cloud Plataform.
+
+##Rodando o projeto
+
+Para rodar o projeto localmente, é necessário instalar o mongodb, npm e rodar através do comando npm start tanto o diretório frontend como o backend.
+
+- [Link para visualização do projeto](joaofq.students.nomoredomainssbs.ru)
