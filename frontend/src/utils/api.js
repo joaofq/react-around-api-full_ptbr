@@ -127,7 +127,7 @@ const token = localStorage.getItem('jwt');
 const api = new Api({
   baseUrl:
     process.env.NODE_ENV === 'production'
-      ? 'https://api.joaofq.students.nomoredomainssbs.ru'
+      ? 'https://api.joaofernandoq.students.nomoredomainssbs.ru'
       : 'http://localhost:3000',
   headers: {
     Accept: 'application/json',

@@ -24,4 +24,4 @@ O Projeto está em fase de implantação em servidor próprio, acoplando com o b
 
 - [Link para o projeto no Figma - Sprint 9](https://www.figma.com/file/lEGbFrRr3ft9xIfxp1RFSz/WEB-Sprint-9)
 
-- [Link para visualização do projeto](joaofq.students.nomoredomainssbs.ru)
+- [Link para visualização do projeto](joaofernandoq.students.nomoredomainssbs.ru)

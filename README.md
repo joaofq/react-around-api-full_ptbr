@@ -33,4 +33,4 @@ O projeto foi implementado em máquina virtual no Google Cloud Plataform.
 
 Para rodar o projeto localmente, é necessário instalar o mongodb, npm e rodar através do comando npm start tanto o diretório frontend como o backend.
 
-- [Link para visualização do projeto](joaofq.students.nomoredomainssbs.ru)
+- Link para visualização do projeto: joaofernandoq.students.nomoredomainssbs.ru
