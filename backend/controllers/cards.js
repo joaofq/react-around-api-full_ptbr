@@ -1,8 +1,8 @@
 const Card = require('../models/card');
 
-const ServerError = require('../middlewares/errors/ServerError');
-const NotFoundError = require('../middlewares/errors/NotFoundError');
-const UnauthorizedError = require('../middlewares/errors/UnauthorizedError');
+const ServerError = require('../errors/ServerError');
+const NotFoundError = require('../errors/NotFoundError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})

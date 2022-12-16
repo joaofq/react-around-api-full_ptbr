@@ -1,18 +1,18 @@
 const winston = require('winston');
 const expressWinston = require('express-winston');
-const fs = require('fs');
-const path = require('path');
+const { existsSync, mkdirSync } = require('fs');
+const { join } = require('path');
 
 const logsDir = './logs';
 
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir);
+if (!existsSync(logsDir)) {
+  mkdirSync(logsDir);
 }
 
 const requestLogger = expressWinston.logger({
   transports: [
     new winston.transports.File({
-      filename: path.join(logsDir, '/request.log'),
+      filename: join(logsDir, '/request.log'),
     }),
   ],
   format: winston.format.json(),
@@ -21,9 +21,8 @@ const requestLogger = expressWinston.logger({
 const errorLogger = expressWinston.errorLogger({
   transports: [
     new winston.transports.File({
-      filename: path.join(logsDir, '/error.log'),
+      filename: join(logsDir, '/error.log'),
     }),
-    //    new winston.transports.Console(),
   ],
   format: winston.format.json(),
 });

@@ -11,12 +11,14 @@ const { createUser, login } = require('./controllers/users');
 
 const auth = require('./middlewares/auth');
 const { celebrate, Joi, errors, isCelebrateError } = require('celebrate');
-const BadRequestError = require('./middlewares/errors/BadRequestError');
+const BadRequestError = require('./errors/BadRequestError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/aroundb');
+mongoose
+  .connect('mongodb://localhost:27017/aroundb')
+  .catch((err) => console.log('Erro ao conectar ao banco de dados: ' + err));
 
 const app = express();
 

@@ -2,10 +2,10 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const ServerError = require('../middlewares/errors/ServerError');
-const NotFoundError = require('../middlewares/errors/NotFoundError');
-const UnauthorizedError = require('../middlewares/errors/UnauthorizedError');
-const ConflictError = require('../middlewares/errors/ConflictError');
+const ServerError = require('../errors/ServerError');
+const NotFoundError = require('../errors/NotFoundError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
+const ConflictError = require('../errors/ConflictError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
