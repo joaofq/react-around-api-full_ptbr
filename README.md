@@ -29,8 +29,9 @@ O Projeto consiste em uma rede social onde os usuários compartilham cards com f
 
 O projeto foi implementado em máquina virtual no Google Cloud Plataform.
 
+- Link para visualização do projeto: joaofernandoq.students.nomoredomainssbs.ru
+
 ##Rodando o projeto
 
 Para rodar o projeto localmente, é necessário instalar o mongodb, npm e rodar através do comando npm start tanto o diretório frontend como o backend.
 
-- Link para visualização do projeto: joaofernandoq.students.nomoredomainssbs.ru
